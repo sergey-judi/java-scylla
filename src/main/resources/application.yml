@@ -1,0 +1,19 @@
+server:
+  port: 8181
+
+spring:
+  main:
+    banner-mode: off
+  cassandra:
+    schema-action: create_if_not_exists
+    keyspace-name: conversion
+    local-datacenter: datacenter1
+    contact-points: 127.0.0.1
+    port: 9042
+
+cassandra:
+  migration:
+    keyspace-name: "${spring.cassandra.keyspace-name}"
+    with-consensus: true
+    strategy: fail_on_duplicates
+    consistency-level: all

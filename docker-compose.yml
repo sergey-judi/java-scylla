@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  scylla-db:
+    container_name: scylla-db
+    image: scylladb/scylla:5.4.1
+    restart: on-failure
+    volumes:
+      - scylla-data:/var/lib/scylla
+    command:
+      - --smp 2
+      - --memory 2G
+    ports:
+      - "7000:7000"
+      - "9042:9042"
+      - "9160:9160"
+      - "9180:9180"
+      - "10000:10000"
+
+volumes:
+  scylla-data: { }
