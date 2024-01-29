@@ -1,4 +1,4 @@
-package org.example.contoller;
+package org.example.controller;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
