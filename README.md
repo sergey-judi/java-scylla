@@ -5,6 +5,7 @@ This is a sandbox project intended to demonstrate functionality of scylla db mig
 - [Migrations](#migrations)
 - [Repository](#repository)
 - [Configuration](#configuration)
+- [Primary & Clustering Keys](#primary-and-clustering-keys)
 
 ### Migrations
 External `org.cognitor.cassandra:cassandra-migration-spring-boot-starter` dependency is used to run migrations on target keyspace.
@@ -80,3 +81,10 @@ public class ScyllaSessionConfiguration {
 ```
 
 For more details see [library source code & description](https://github.com/patka/cassandra-migration)
+
+### Primary and Clustering Keys
+When declaring table schema it's important to define primary key correctly 
+
+`PRIMARY KEY ((base_currency, quote_currency))` - composite primary key of two columns `base_currency` & `quote_currency`
+
+`PRIMARY KEY (base_currency, quote_currency)` - `base_currency` is the primary key whereas `quote_currency` is clustering key

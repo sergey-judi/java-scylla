@@ -1,5 +1,6 @@
 CREATE KEYSPACE IF NOT EXISTS conversion WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 } AND durable_writes = true;
 describe tables;
+describe schema;
 select * from conversion.currency_conversion;
 INSERT INTO conversion.currency_conversion (base_currency, quote_currency, rate) VALUES ('EUR', 'UAH', 41.1);
 INSERT INTO conversion.currency_conversion (base_currency, quote_currency, rate) VALUES ('USD', 'UAH', 38.1);

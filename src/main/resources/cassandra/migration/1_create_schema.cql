@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS conversion.currency_conversion (
     base_currency TEXT,
     quote_currency TEXT,
     rate DECIMAL,
-    PRIMARY KEY (base_currency, quote_currency)
+    PRIMARY KEY ((base_currency, quote_currency))
 );
