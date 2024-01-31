@@ -17,3 +17,7 @@ cassandra:
     with-consensus: true
     strategy: fail_on_duplicates
     consistency-level: all
+
+logging:
+  level:
+    org.springframework.data.cassandra.core.cql: DEBUG

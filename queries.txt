@@ -1,3 +1,4 @@
+-- cql
 CREATE KEYSPACE IF NOT EXISTS conversion WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 } AND durable_writes = true;
 describe tables;
 describe schema;
@@ -5,3 +6,9 @@ select * from conversion.currency_conversion;
 INSERT INTO conversion.currency_conversion (base_currency, quote_currency, rate) VALUES ('EUR', 'UAH', 41.1);
 INSERT INTO conversion.currency_conversion (base_currency, quote_currency, rate) VALUES ('USD', 'UAH', 38.1);
 show version;
+SELECT base_currency, quote_currency, rate, TTL(rate) FROM conversion.currency_conversion;
+
+-- http
+curl 'localhost:8181/conversions'
+curl 'localhost:8181/conversions/single?baseCurrency=ABC&quoteCurrency=DEF'
+curl -X POST 'localhost:8181/conversions/single?baseCurrency=ABC&quoteCurrency=DEF&rate=1.02&ttl=10'
