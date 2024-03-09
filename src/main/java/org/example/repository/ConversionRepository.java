@@ -11,7 +11,8 @@ import reactor.core.publisher.Mono;
 import java.math.BigDecimal;
 
 @Repository
-public interface ConversionRepository extends ReactiveCassandraRepository<CurrencyConversion, CompositeKey> {
+public interface ConversionRepository
+    extends CustomConversionRepository, ReactiveCassandraRepository<CurrencyConversion, CompositeKey>  {
 
   // example with generated query
   @AllowFiltering // better to avoid

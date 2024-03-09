@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.entity.CompositeKey;
 import org.example.entity.CurrencyConversion;
 import org.example.repository.ConversionRepository;
-import org.example.repository.CustomConversionRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +23,6 @@ import java.time.Duration;
 public class ConversionController {
 
   final ConversionRepository conversionRepository;
-  final CustomConversionRepository customConversionRepository;
 
   @GetMapping
   public Flux<CurrencyConversion> getAllCurrencyConversions() {
@@ -58,7 +56,7 @@ public class ConversionController {
         )
         .setRate(rate);
 
-    return customConversionRepository.save(currencyConversion, Duration.ofSeconds(ttl));
+    return conversionRepository.save(currencyConversion, Duration.ofSeconds(ttl));
   }
 
 }
