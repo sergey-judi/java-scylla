@@ -4,9 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.example.controller.dto.CurrencyConversionDto;
-import org.example.entity.CompositeKey;
-import org.example.entity.CurrencyConversion;
-import org.example.repository.ConversionRepository;
+import org.example.service.CurrencyConversionService;
 import org.example.utility.CurrencyConversionMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,18 +15,17 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/conversions")
 public class ConversionController {
 
-  final ConversionRepository conversionRepository;
+  private final CurrencyConversionService currencyConversionService;
 
   @GetMapping
   public Flux<CurrencyConversionDto> getAllCurrencyConversions() {
-    return conversionRepository.findAll()
+    return currencyConversionService.getAll()
         .map(CurrencyConversionMapper::toDto);
   }
 
@@ -37,11 +34,8 @@ public class ConversionController {
       @NotBlank @RequestParam String baseCurrency,
       @NotBlank @RequestParam String quoteCurrency
   ) {
-    return conversionRepository.findById(
-        new CompositeKey()
-            .setBaseCurrency(baseCurrency)
-            .setQuoteCurrency(quoteCurrency)
-    ).map(CurrencyConversionMapper::toDto);
+    return currencyConversionService.getById(baseCurrency, quoteCurrency).
+        map(CurrencyConversionMapper::toDto);
   }
 
   @PostMapping("/single")
@@ -51,15 +45,7 @@ public class ConversionController {
       @NotNull @RequestParam BigDecimal rate,
       @NotNull @RequestParam Integer ttl
   ) {
-    CurrencyConversion currencyConversion = new CurrencyConversion()
-        .setKey(
-            new CompositeKey()
-                .setBaseCurrency(baseCurrency)
-                .setQuoteCurrency(quoteCurrency)
-        )
-        .setRate(rate);
-
-    return conversionRepository.save(currencyConversion, Duration.ofSeconds(ttl))
+    return currencyConversionService.saveWithTtl(baseCurrency, quoteCurrency, rate, ttl)
         .map(CurrencyConversionMapper::toDto);
   }
 
