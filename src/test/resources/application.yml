@@ -1,0 +1,21 @@
+server:
+  port: 8181
+
+spring:
+  main:
+    banner-mode: off
+  cassandra:
+    schema-action: none
+    keyspace-name: test_keyspace_name
+    local-datacenter: datacenter1
+
+cassandra:
+  migration:
+    keyspace-name: "${spring.cassandra.keyspace-name}"
+    with-consensus: true
+    strategy: fail_on_duplicates
+    consistency-level: all
+
+logging:
+  level:
+    org.springframework.data.cassandra.core.cql: DEBUG
