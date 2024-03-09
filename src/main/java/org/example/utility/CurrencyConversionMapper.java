@@ -3,6 +3,7 @@ package org.example.utility;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.example.controller.dto.CurrencyConversionDto;
+import org.example.entity.CompositeKey;
 import org.example.entity.CurrencyConversion;
 
 import java.util.List;
@@ -22,6 +23,16 @@ public class CurrencyConversionMapper {
         .quoteCurrency(entity.getKey().getQuoteCurrency())
         .rate(entity.getRate())
         .build();
+  }
+
+  public static CurrencyConversion toModel(CurrencyConversionDto dto) {
+    return new CurrencyConversion()
+        .setKey(
+            new CompositeKey()
+                .setBaseCurrency(dto.baseCurrency())
+                .setQuoteCurrency(dto.quoteCurrency())
+        )
+        .setRate(dto.rate());
   }
 
 }

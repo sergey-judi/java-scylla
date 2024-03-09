@@ -41,15 +41,7 @@ public class DefaultCurrencyConversionService implements CurrencyConversionServi
   }
 
   @Override
-  public Mono<CurrencyConversion> saveWithTtl(String baseCurrency, String quoteCurrency, BigDecimal rate, Integer ttl) {
-    CurrencyConversion currencyConversion = new CurrencyConversion()
-        .setKey(
-            new CompositeKey()
-                .setBaseCurrency(baseCurrency)
-                .setQuoteCurrency(quoteCurrency)
-        )
-        .setRate(rate);
-
+  public Mono<CurrencyConversion> saveWithTtl(CurrencyConversion currencyConversion, Integer ttl) {
     return conversionRepository.save(currencyConversion, Duration.ofSeconds(ttl));
   }
 

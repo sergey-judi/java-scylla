@@ -7,9 +7,11 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
+import java.util.List;
 
 @Slf4j
 @RestControllerAdvice(assignableTypes = ConversionController.class)
@@ -33,6 +35,24 @@ public class ErrorHandler {
     return build(
         HttpStatus.NOT_FOUND,
         ex.getMessage(),
+        ex.getClass()
+    );
+  }
+
+  @ExceptionHandler(WebExchangeBindException.class)
+  public ProblemDetail onWebExchangeBindException(WebExchangeBindException ex) {
+    List<String> errors = ex.getFieldErrors()
+        .stream()
+        .map(a ->"%s: %s".formatted(a.getField(), a.getDefaultMessage()))
+        .toList();
+
+    String errorMessage = String.join(", ", errors);
+
+    log.error("Validation exception with message=[{}]", errorMessage);
+
+    return build(
+        HttpStatus.BAD_REQUEST,
+        errorMessage,
         ex.getClass()
     );
   }

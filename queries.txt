@@ -11,4 +11,4 @@ SELECT base_currency, quote_currency, rate, TTL(rate) FROM conversion.currency_c
 -- http
 curl 'localhost:8181/conversions'
 curl 'localhost:8181/conversions/single?baseCurrency=ABC&quoteCurrency=DEF'
-curl -X POST 'localhost:8181/conversions/single?baseCurrency=ABC&quoteCurrency=DEF&rate=1.02&ttl=10'
+curl -X POST 'localhost:8181/conversions/single?ttl=10' -H 'Content-Type: application/json' -d '{"baseCurrency": "ABC", "quoteCurrency": "DEF", "rate": 1.23}'
