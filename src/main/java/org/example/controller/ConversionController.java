@@ -3,9 +3,11 @@ package org.example.controller;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.example.controller.dto.CurrencyConversionDto;
 import org.example.entity.CompositeKey;
 import org.example.entity.CurrencyConversion;
 import org.example.repository.ConversionRepository;
+import org.example.utility.CurrencyConversionMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,12 +27,13 @@ public class ConversionController {
   final ConversionRepository conversionRepository;
 
   @GetMapping
-  public Flux<CurrencyConversion> getAllCurrencyConversions() {
-    return conversionRepository.findAll();
+  public Flux<CurrencyConversionDto> getAllCurrencyConversions() {
+    return conversionRepository.findAll()
+        .map(CurrencyConversionMapper::toDto);
   }
 
   @GetMapping("/single")
-  public Mono<CurrencyConversion> getSingleCurrencyConversion(
+  public Mono<CurrencyConversionDto> getSingleCurrencyConversion(
       @NotBlank @RequestParam String baseCurrency,
       @NotBlank @RequestParam String quoteCurrency
   ) {
@@ -38,11 +41,11 @@ public class ConversionController {
         new CompositeKey()
             .setBaseCurrency(baseCurrency)
             .setQuoteCurrency(quoteCurrency)
-    );
+    ).map(CurrencyConversionMapper::toDto);
   }
 
   @PostMapping("/single")
-  public Mono<CurrencyConversion> saveSingleCurrencyConversion(
+  public Mono<CurrencyConversionDto> saveSingleCurrencyConversion(
       @NotBlank @RequestParam String baseCurrency,
       @NotBlank @RequestParam String quoteCurrency,
       @NotNull @RequestParam BigDecimal rate,
@@ -56,7 +59,8 @@ public class ConversionController {
         )
         .setRate(rate);
 
-    return conversionRepository.save(currencyConversion, Duration.ofSeconds(ttl));
+    return conversionRepository.save(currencyConversion, Duration.ofSeconds(ttl))
+        .map(CurrencyConversionMapper::toDto);
   }
 
 }
